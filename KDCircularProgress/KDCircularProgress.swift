@@ -239,8 +239,11 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         }
         let dotAnimation = CABasicAnimation(keyPath: "transform.rotation")// create animation and add it to shape layer
         dotAnimation.fromValue = 0
-        dotAnimation.toValue = 2 * Double.pi
+        dotAnimation.toValue = Double.pi * 2 * toAngle/360
         dotAnimation.duration = animationDuration
+        dotAnimation.isRemovedOnCompletion = false
+        dotAnimation.fillMode = .forwards
+        dotAnimation.delegate = self
         dotlayer!.add(dotAnimation, forKey: "transform.rotation")
         
         progressLayer.add(animation, forKey: "angle")

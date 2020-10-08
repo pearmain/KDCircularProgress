@@ -36,7 +36,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func animateButtonTapped(_ sender: UIButton) {
-        progress.animate(fromAngle: 0, toAngle: 360, duration: 2) { completed in
+        progress.animate(fromAngle: 0, toAngle: 270, duration: 2) { completed in
             if completed {
                 print("animation stopped, completed")
             } else {
