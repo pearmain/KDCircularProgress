@@ -107,17 +107,15 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         }
     }
     
-    public var dotColor: UIColor = .white {
+    @IBInspectable public var dotColor: UIColor = .white {
         didSet {
             progressLayer.dotColor = dotColor
-            progressLayer.setNeedsDisplay()
         }
     }
     
-    public var dotThickness: CGFloat = 2/3 { //Between 0 and 1
+    @IBInspectable public var dotThickness: CGFloat = 2/3 { //Between 0 and 1
         didSet {
             progressLayer.dotThickness = dotThickness
-            progressLayer.setNeedsLayout()
         }
     }
     
@@ -189,6 +187,8 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         progressLayer.progressThickness = progressThickness / 2.0
         progressLayer.trackColor = trackColor
         progressLayer.trackThickness = trackThickness / 2.0
+        progressLayer.dotColor = dotColor
+        progressLayer.dotThickness = dotThickness
     }
     
     private func checkAndSetIBColors() {
@@ -227,9 +227,9 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         angle = toAngle
         animationCompletionBlock = completion
         
-        //create shape layer object
+        //create dot
         if dotlayer == nil {
-            let trackLineWidth = radius * trackThickness
+            let trackLineWidth = radius * progressThickness
             let trackRadius = trackLineWidth/4
             let thumbRadius: CGFloat = trackRadius*(dotThickness)
             let padding: CGFloat = trackRadius*(1 - dotThickness)
@@ -377,6 +377,8 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
             trackColor = progressLayer.trackColor
             colorsArray = progressLayer.colorsArray
             progressInsideFillColor = progressLayer.progressInsideFillColor
+            dotColor = progressLayer.dotColor
+            dotThickness = progressLayer.dotThickness
         }
         
         override init() {
