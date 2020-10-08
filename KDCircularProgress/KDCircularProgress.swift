@@ -15,8 +15,7 @@ import UIKit
 @objcMembers
 public class KDCircularProgress: UIView, CAAnimationDelegate {
     
-    var dotlayer: CAShapeLayer?
-    
+    private var dotlayer: CAShapeLayer?
     private var progressLayer: KDCircularProgressViewLayer {
         get {
             return layer as! KDCircularProgressViewLayer
@@ -112,6 +111,13 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         didSet {
             progressLayer.dotColor = dotColor
             progressLayer.setNeedsDisplay()
+        }
+    }
+    
+    public var dotThickness: CGFloat = 2/3 { //Between 0 and 1
+        didSet {
+            progressLayer.dotThickness = dotThickness
+            progressLayer.setNeedsLayout()
         }
     }
     
@@ -225,8 +231,8 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         if dotlayer == nil {
             let trackLineWidth = radius * trackThickness
             let trackRadius = trackLineWidth/4
-            let thumbRadius: CGFloat = trackRadius*(2/3)
-            let padding: CGFloat = trackRadius*(1/3)
+            let thumbRadius: CGFloat = trackRadius*(dotThickness)
+            let padding: CGFloat = trackRadius*(1 - dotThickness)
             let x = -thumbRadius
             let y = -radius + padding
 
@@ -323,6 +329,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         var trackThickness: CGFloat = 0.5
         var trackColor: UIColor = .black
         var dotColor: UIColor = .white
+        var dotThickness: CGFloat = 2/3
         var progressInsideFillColor: UIColor = .clear
         var colorsArray: [UIColor] = [] {
             didSet { invalidateGradientCache() }
