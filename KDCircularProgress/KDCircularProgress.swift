@@ -14,6 +14,9 @@ import UIKit
 @IBDesignable
 @objcMembers
 public class KDCircularProgress: UIView, CAAnimationDelegate {
+    
+    var dotlayer: CAShapeLayer?
+    
     private var progressLayer: KDCircularProgressViewLayer {
         get {
             return layer as! KDCircularProgressViewLayer
@@ -211,6 +214,28 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         angle = toAngle
         animationCompletionBlock = completion
         
+        //create shape layer object
+        if dotlayer == nil {
+            let trackLineWidth = radius * trackThickness
+            let trackRadius = trackLineWidth/4
+            let thumbRadius: CGFloat = trackRadius*(2/3)
+            let padding: CGFloat = trackRadius*(1/3)
+            let x = -thumbRadius
+            let y = -radius + padding
+
+            dotlayer = CAShapeLayer()
+            dotlayer!.fillColor = UIColor.white.cgColor
+            dotlayer!.strokeColor = nil
+            dotlayer!.path = CGPath(ellipseIn: CGRect(x: x, y: y, width: 2 * thumbRadius, height: 2 * thumbRadius), transform: nil)
+            dotlayer!.position = CGPoint(x: progressLayer.frame.size.width/2, y: progressLayer.frame.size.height/2)
+            progressLayer.addSublayer(dotlayer!)
+        }
+        let dotAnimation = CABasicAnimation(keyPath: "transform.rotation")// create animation and add it to shape layer
+        dotAnimation.fromValue = 0
+        dotAnimation.toValue = 2 * Double.pi
+        dotAnimation.duration = animationDuration
+        dotlayer!.add(dotAnimation, forKey: "transform.rotation")
+        
         progressLayer.add(animation, forKey: "angle")
     }
     
@@ -243,6 +268,22 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
     }
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+//        if dotlayer == nil {
+//            let thumbRadius = CGFloat(5)
+//            let trackLineWidth = radius * trackThickness
+//            let dotArcCenter  = CGPoint(x: progressLayer.frame.size.width/2, y:  trackLineWidth/2)
+//            let dotCirclePath : UIBezierPath = UIBezierPath(arcCenter: dotArcCenter, radius:
+//                thumbRadius, startAngle: 0, endAngle: 360, clockwise: true)
+//
+//            dotlayer = CAShapeLayer()
+//            dotlayer!.fillColor = UIColor.white.cgColor
+//            dotlayer!.path = dotCirclePath.cgPath
+//            dotlayer!.strokeColor = nil
+//            dotlayer!.path = CGPath(ellipseIn: CGRect(x: -thumbRadius, y: -radius - thumbRadius, width: 2 * thumbRadius, height: 2 * thumbRadius), transform: nil)
+//            dotlayer!.position = CGPoint(x: progressLayer.frame.size.width/2, y: progressLayer.frame.size.height/2)
+//            progressLayer.addSublayer(dotlayer!)
+//        }
+        
         animationCompletionBlock?(flag)
         animationCompletionBlock = nil
     }
