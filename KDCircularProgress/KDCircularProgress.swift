@@ -108,6 +108,13 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         }
     }
     
+    public var dotColor: UIColor = .white {
+        didSet {
+            progressLayer.dotColor = dotColor
+            progressLayer.setNeedsDisplay()
+        }
+    }
+    
     @IBInspectable public var progressInsideFillColor: UIColor? = nil {
         didSet {
             progressLayer.progressInsideFillColor = progressInsideFillColor ?? .clear
@@ -224,7 +231,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
             let y = -radius + padding
 
             dotlayer = CAShapeLayer()
-            dotlayer!.fillColor = UIColor.white.cgColor
+            dotlayer!.fillColor = dotColor.cgColor
             dotlayer!.strokeColor = nil
             dotlayer!.path = CGPath(ellipseIn: CGRect(x: x, y: y, width: 2 * thumbRadius, height: 2 * thumbRadius), transform: nil)
             dotlayer!.position = CGPoint(x: progressLayer.frame.size.width/2, y: progressLayer.frame.size.height/2)
@@ -268,22 +275,6 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
     }
     
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-//        if dotlayer == nil {
-//            let thumbRadius = CGFloat(5)
-//            let trackLineWidth = radius * trackThickness
-//            let dotArcCenter  = CGPoint(x: progressLayer.frame.size.width/2, y:  trackLineWidth/2)
-//            let dotCirclePath : UIBezierPath = UIBezierPath(arcCenter: dotArcCenter, radius:
-//                thumbRadius, startAngle: 0, endAngle: 360, clockwise: true)
-//
-//            dotlayer = CAShapeLayer()
-//            dotlayer!.fillColor = UIColor.white.cgColor
-//            dotlayer!.path = dotCirclePath.cgPath
-//            dotlayer!.strokeColor = nil
-//            dotlayer!.path = CGPath(ellipseIn: CGRect(x: -thumbRadius, y: -radius - thumbRadius, width: 2 * thumbRadius, height: 2 * thumbRadius), transform: nil)
-//            dotlayer!.position = CGPoint(x: progressLayer.frame.size.width/2, y: progressLayer.frame.size.height/2)
-//            progressLayer.addSublayer(dotlayer!)
-//        }
-        
         animationCompletionBlock?(flag)
         animationCompletionBlock = nil
     }
@@ -328,6 +319,7 @@ public class KDCircularProgress: UIView, CAAnimationDelegate {
         var progressThickness: CGFloat = 0.5
         var trackThickness: CGFloat = 0.5
         var trackColor: UIColor = .black
+        var dotColor: UIColor = .white
         var progressInsideFillColor: UIColor = .clear
         var colorsArray: [UIColor] = [] {
             didSet { invalidateGradientCache() }
